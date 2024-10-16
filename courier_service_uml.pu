@@ -1,0 +1,171 @@
+@startuml
+class SpringMain{
+        +run()
+}
+
+package Entities <<Rectangle>> {
+    class Product {
+                - id: long
+                - name: String
+                - price: double
+                - category: String
+                - sale: boolean
+        }
+
+    class Review {
+                - id: long
+                - product_id: long
+                - issue_text: String
+        }
+
+    class Order {
+                - id: long
+                - product_ids: List<long>
+                - user_id: long
+                - cost: double
+                - address: Address
+        }
+
+    class User {
+                - id: long
+                - name: String
+                - addresses: List<Address>
+                - default_address: Address
+                - orders: List<long>
+        }
+
+    class Admin {
+                - id: long
+                - name: String
+                - priviledges       
+        }
+
+    class Address {
+               - street: String
+               - city: String
+               - postal_code: String
+               - provice: String 
+        }
+
+    class Return {
+                - id: long
+                - user_id: long
+                - product_id: long
+                - order_id: long
+        }
+}
+
+package Service <<Rectangle>> {
+    interface StockService {
+                + manageStock()
+                + restock()
+        }
+    interface OrdersService {
+             +sendConfirmation()
+             +sendTracking()
+    }
+
+    class StockServiceImpl {
+                + manageStock()
+                + restock()
+        }
+    class OrdersServiceImpl {
+             +sendConfirmation()
+             +sendTracking()
+    }
+}
+
+package "Client Controllers" as CC <<Rectangle>> {
+    class LoginController {
+               +loginForm()
+               +login() 
+        }
+
+    class AdminLoginController {
+               +loginForm()
+               +login() 
+        }
+
+    class CartController {
+                + displayCart()
+                + removeItem()
+                + addItem()
+        }
+    class PaymentController {
+                + getAddress()
+                + getPayment()
+        }
+    class ProductController{
+               + listProducts()
+               + listCategories()
+               + listItem()
+               + listSales()
+    }
+
+    class ReviewController{
+         + makeReview()
+     }
+
+    class ReturnsController {
+         + makeForm()
+         + submitReturn()
+     }
+}
+
+package "Admin Controllers" <<Rectangle>> {
+    class PendingReturnsController {
+                + displayPendingReturns()
+                + restockReturn()
+                + rejectReturn()
+        }
+
+    class PendingOrdersController {
+                +listPendingOrders();
+                +packageLabeled();
+                +packageShipped();
+     }
+}
+
+package Repository <<Database>> {
+    interface ProductRepository{}
+    interface ReviewRepository{}
+    interface OrderRepository{}
+    interface UserRepository{}
+    interface AdminRepository{}
+    interface ReturnsRepository{}
+}
+
+
+Address --* User
+Order --* User
+
+PendingReturnsController .up.|> ReturnsRepository
+PendingOrdersController .up.|> OrderRepository
+PendingOrdersController --o OrdersService
+
+StockService ..|> StockServiceImpl
+OrdersService ..|> OrdersServiceImpl
+
+CartController --o StockService
+CartController --o PaymentController
+
+StockService o-- PendingReturnsController
+
+ReviewController .[#blue].|> ReviewRepository
+ReturnsController .[#red].|> ReturnsRepository: INSERT
+ProductController ..|> ProductRepository: SELECT
+
+AdminLoginController .[#green].|> AdminRepository:  SELECT
+LoginController .[#orange].|> UserRepository: SELECT
+
+Order ..|> OrderRepository
+User ..|> UserRepository
+Admin ..|> AdminRepository
+Return ..|> ReturnsRepository
+Product ..|> ProductRepository
+Review ..|> ReviewRepository
+
+StockService ..|> ProductRepository: UPDATE
+
+SpringMain *-- CC
+@enduml

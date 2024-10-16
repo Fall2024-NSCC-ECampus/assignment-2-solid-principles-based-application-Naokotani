@@ -1,0 +1,6 @@
+
+* Project Overview
+This is application is designed to use [[https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html][@RestController]] that will send and receive data via HTTP in order to interact with a mySQL database via [[https://spring.io/projects/spring-data-jpa][Sring JPA]]. The actual client side would be handled by a front end framework, such as React so that data can be updated live while users interact with that database. Optionally, [[https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/mvc.html][Spring MVC]] could be used with [[https://docs.spring.io/spring-framework/reference/web/webmvc-view/mvc-thymeleaf.html][Thymeleaf]] to handle the Admin or user clients. The application would also implement [[https://spring.io/projects/spring-security][Spring Security]] for user authentication, privileges and [[https://docs.spring.io/spring-security/reference/servlet/oauth2/index.html][OAuth]].
+
+* UML Diagram
+[[file:courier_service_uml.png]]
