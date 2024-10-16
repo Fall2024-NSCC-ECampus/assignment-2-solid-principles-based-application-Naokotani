@@ -6,7 +6,7 @@ This is application is designed to use [[https://docs.spring.io/spring-framework
 [[file:courier_service_uml.png]]
 
 * RestController
-Responses can be sent using an =@RestContoller= by sending an Entity class that implements Spring JPA like this:
+Responses can be sent using an =@RestContoller= by sending an Entity class that implements Spring JPA. You can also implement it using =@ResponseBody= like so:
 
 #+begin_src java
 @GetMapping("/products")
