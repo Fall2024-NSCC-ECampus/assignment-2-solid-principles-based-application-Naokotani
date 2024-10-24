@@ -16,3 +16,18 @@ public ResponseEntity<List<Products>> getProducts() {
 }
 #+end_src
 
+* SOLID
+** Single responsibility
+I have separated out the responsibility of controllers, repositories, services into different classes and packages. I also separated user and admin controllers into separate packages to maintain single responsibility on both the class and package level. Using services for more complex operations instead of using the controllers means that controllers are restricted to dealing with controller related activities, receiving HTTP requests and sending HTTP responses, while managing stock or returns are separated out to their own services. In cases where operates are limited to simply returning a data of a SQL query, the repository implementations themselves can handle this behaviour.
+
+** Open-Closed Principle
+All of the entities are extendable both by extending the class and by setting up joins in the database. 
+
+** Liskov-Substitution
+Carefully using aggregation to construct the relationship between users, orders, and addresses, means that users can exist without orders or addresses, but orders must exist with a user and an address. If orders were contained within a list on a user, users could exist with an empty orders list, which would violate this rule.
+
+** Interface Segregation
+The interfaces are small and only need to be used by the appropriate controllers. Controllers that do not need service interfaces do not depend on them. By using =@ResponseBody= and =@RestController= on the appropriate controllers, only those controllers that need to use the =@ResponseBody= interface depend on it.
+
+** Dependency Inversion
+The direct usage of interfaces instead of classes means limits the dependency of high level interfaces on low level dependencies is limited. Using interfaces that take data structures or atomic types as arguments and return data structures or atomic types means further limits dependency on methods between high level interfaces.
